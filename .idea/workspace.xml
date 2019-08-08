@@ -13,6 +13,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="SIGN_OFF_COMMIT" value="true" />
   </component>
   <component name="ProjectId" id="1P8DctrcBkjrmfnx47Qa6Dsw7WX" />
   <component name="PropertiesComponent">
