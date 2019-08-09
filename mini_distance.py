@@ -27,9 +27,9 @@ source_str= 'horse' ; dest_str =  'ros'
 
 #source_str = "intention" ; dest_str = "execution"
 
-source_str = "wonderful"  ; dest_str = "wrong"
+#source_str = "wonderful"  ; dest_str = "wrong"
 
-#source_str = "industry" ; dest_str   = "interest"
+source_str = "industry" ; dest_str   = "interest"
 
 #source_str = "AdustrA" ; dest_str   = "AteresA"
 
@@ -226,7 +226,7 @@ def clauSubLengthForward(destIndexList,source_str):
     return lengthDictForward,postIndexDict
 
 #字典相加  ==========
-def merge_dict(x,y):
+def merge_Dict(x,y):
     buffer ={}
     for k,v in x.items():
         if k in y.keys():
@@ -258,7 +258,7 @@ def getDistance(source_str,dest_str):
     print('   post_forward_Dict:',post_forward_Dict)
 
     # 合并相加字典并返回距离最小值
-    allDict = merge_dict(back_Dict,forward_Dict)
+    allDict = merge_Dict(back_Dict,forward_Dict)
 
     for k,v in allDict.items():
         if v == min(allDict.values()):
@@ -330,6 +330,8 @@ def getBack_post_path(mini_key,post_back_Dict):
                 TaskEnd =False
                 break
 
+        new_back_path = copy.deepcopy(back_path) # 新增一个变量，深度copy，防止Python中遍历字典过程中更改元素导致异常的解决方法
+
         for k,back_path_one in back_path.items():
             curr_key = back_path_one[-1]
             if(curr_key==(PATH_END_FLAG,PATH_END_FLAG) ):continue
@@ -339,7 +341,7 @@ def getBack_post_path(mini_key,post_back_Dict):
                 next_post_key_list=[]
 
             if next_post_key_list==[]: #找到最后一个节点，退出
-                back_path[k].append((PATH_END_FLAG,PATH_END_FLAG))
+                new_back_path[k].append((PATH_END_FLAG,PATH_END_FLAG))
                 #break
             else: #重复排列节点序列表   1*2*3
                 TaskEnd = False
@@ -347,10 +349,13 @@ def getBack_post_path(mini_key,post_back_Dict):
                 curr_total_paths = len(next_post_key_list)  # 当前节点到下一节点的有效路径数量==
                 last_total_paths = total_paths
                 total_paths *= curr_total_paths #总路由数量
-                start_i = len(back_path)
+                start_i = len(new_back_path)
+
                 if start_i < total_paths:#复制多份节点记录
                     for i in range(0,total_paths -last_total_paths):
-                        back_path[start_i+i] = copy.deepcopy(back_path[i])
+                        new_back_path[start_i+i] = copy.deepcopy(new_back_path[i])
+
+            back_path = new_back_path  # 还原变量==
 
             for _ in range(last_total_paths):
                 for next_post_key in next_post_key_list:
