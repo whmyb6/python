@@ -5,9 +5,9 @@
 # date   :  2019-7-28   开始编程
 # update :  2019-7-31   修改 bug 。。。。。
 # update :  2019-8-07   增加 变化详细情况 显示
-# ========= python 2.7   =========
+# ========= python 2.7 or 3  =========
 #
-#  !!!!   注意：适用 PYTHON 2.7 !!!!  =========
+#  !!!!   注意：适用 PYTHON 2.7 or 3 !!!!  =========
 #
 #  ********************************************************************************************
 #  整体思路：暴力搜索：以目标字符串的每一个字符，作为关键节点，对源字符串进行双向遍历：
@@ -29,7 +29,7 @@ source_str= 'horse' ; dest_str =  'ros'
 
 #source_str = "wonderful"  ; dest_str = "wrong"
 
-source_str = "industry" ; dest_str   = "interest"
+#source_str = "industry" ; dest_str   = "interest"
 
 #source_str = "AdustrA" ; dest_str   = "AteresA"
 
