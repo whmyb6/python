@@ -378,20 +378,20 @@ def showDetailStep( source_str,dest_str,next_post_key_lists,Back=True):
         # 计算后向记录变化情况
         if Back:
             for i  in range( len(next_post_key_list)-1,0,-1):
-                res,source_str = TowCharPath(next_post_key_list,i,source_str,dest_str)
+                res,source_str = towCharPath(next_post_key_list,i,source_str,dest_str)
                 stepStr.extend(res)
         else:
             # 计算前向记录变化情况
             #post_key_list_reverse = next_post_key_list[::-1]
             for i  in range( 1,len(next_post_key_list)):
-                res,source_str = TowCharPath(next_post_key_list, i, source_str, dest_str,Back)
+                res,source_str = towCharPath(next_post_key_list, i, source_str, dest_str,Back)
                 stepStr.extend(res)
 
         pointPathDict[Path_js] =stepStr
     return pointPathDict
 
 # 计算两个字符需要变化的节点详细情况
-def TowCharPath(next_post_key_list,i,source_str,dest_str,Back = True):
+def towCharPath(next_post_key_list,i,source_str,dest_str,Back = True):
     stepStr = []
     if Back:  # 后向计算,计算两点位置
         next_post_key = next_post_key_list[i]
