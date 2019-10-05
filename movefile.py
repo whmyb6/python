@@ -13,14 +13,9 @@ path = r'J:\OK-2017\OK\JP\大橋未久 @@@@@@@@'
 
 def execBatfile(filename):
     print(filename)
-    #filename = unicode(filename, "utf8")
-    #filename ='date'
     #os.system("cmd/c start")
     #os.system("start cmd /k echo Hello, World!")     # 新开的窗口不关闭
     os.system("start cmd /c " +filename)            # 新开的窗口会自动关闭，
-    #os.system("cmd/c start&&" +  filename )
-    # print(res.read())
-    #os.system("pause")
     '''
     proc = subprocess.Popen("cmd.exe /c" + filename,creationflags=subprocess.CREATE_NEW_CONSOLE)
     time.sleep(10)
