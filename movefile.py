@@ -7,6 +7,15 @@ import subprocess,psutil
 import time
 import subprocess,time,psutil
 
+def getTime():
+    #获得当前时间时间戳
+    now = int(time.time())
+    #转换为其他日期格式,如:"%Y-%m-%d %H:%M:%S"
+    timeStruct = time.localtime(now)
+    strTime = time.strftime("%Y%m%d_%H_%M_%S", timeStruct)
+    print(strTime)
+    return strTime
+
 # 功能：将当前目录的字目录中的文件，移动到当前目录下=====
 # 当前目录设置
 path = r'J:\OK-2017\OK\JP\大橋未久 @@@@@@@@'
@@ -54,8 +63,15 @@ for root, dirs, files in os.walk('.', topdown=True):
             print(format('filename = %s') % os.path.join(root, name)).decode(encoding='gbk')
 
             sourcefile =(os.path.join(root, name))
+
+            if os.path.exists(name):
+                name = name+"_" + getTime()
+                moveCmd = 'move "' + sourcefile + '" "' +name +'"'
+            else:
+                moveCmd = 'move "' + sourcefile + '" .'
+
             newfile = (os.path.join('.',name))
-            moveCmd = 'move "' + sourcefile + '" .'
+
             print(format('movefile: %s ==> %s '%(sourcefile,newfile))).decode(encoding='gbk')
             try:
                 shutil.move(sourcefile, newfile)  # 移动
