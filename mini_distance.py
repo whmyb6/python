@@ -5,9 +5,10 @@
 # date   :  2019-7-28   开始编程
 # update :  2019-7-31   修改 bug 。。。。。
 # update :  2019-8-07   增加 变化详细情况 显示
-# ========= python 2.7   =========
+# update :  2019-8-09   兼容 python3
+# ========= python 2.7 or 3  =========
 #
-#  !!!!   注意：适用 PYTHON 2.7 !!!!  =========
+#  !!!!   注意：适用 PYTHON 2.7 or 3 !!!!  =========
 #
 #  ********************************************************************************************
 #  整体思路：暴力搜索：以目标字符串的每一个字符，作为关键节点，对源字符串进行双向遍历：
@@ -27,7 +28,7 @@ source_str= 'horse' ; dest_str =  'ros'
 
 #source_str = "intention" ; dest_str = "execution"
 
-source_str = "wonderful"  ; dest_str = "wrong"
+#source_str = "wonderful"  ; dest_str = "wrong"
 
 #source_str = "industry" ; dest_str   = "interest"
 
@@ -226,7 +227,7 @@ def clauSubLengthForward(destIndexList,source_str):
     return lengthDictForward,postIndexDict
 
 #字典相加  ==========
-def merge_dict(x,y):
+def merge_Dict(x,y):
     buffer ={}
     for k,v in x.items():
         if k in y.keys():
@@ -258,7 +259,7 @@ def getDistance(source_str,dest_str):
     print('   post_forward_Dict:',post_forward_Dict)
 
     # 合并相加字典并返回距离最小值
-    allDict = merge_dict(back_Dict,forward_Dict)
+    allDict = merge_Dict(back_Dict,forward_Dict)
 
     for k,v in allDict.items():
         if v == min(allDict.values()):
@@ -330,6 +331,8 @@ def getBack_post_path(mini_key,post_back_Dict):
                 TaskEnd =False
                 break
 
+        new_back_path = copy.deepcopy(back_path) # 新增一个变量，深度copy，防止Python中遍历字典过程中更改元素导致异常的解决方法
+
         for k,back_path_one in back_path.items():
             curr_key = back_path_one[-1]
             if(curr_key==(PATH_END_FLAG,PATH_END_FLAG) ):continue
@@ -339,7 +342,7 @@ def getBack_post_path(mini_key,post_back_Dict):
                 next_post_key_list=[]
 
             if next_post_key_list==[]: #找到最后一个节点，退出
-                back_path[k].append((PATH_END_FLAG,PATH_END_FLAG))
+                new_back_path[k].append((PATH_END_FLAG,PATH_END_FLAG))
                 #break
             else: #重复排列节点序列表   1*2*3
                 TaskEnd = False
@@ -347,10 +350,13 @@ def getBack_post_path(mini_key,post_back_Dict):
                 curr_total_paths = len(next_post_key_list)  # 当前节点到下一节点的有效路径数量==
                 last_total_paths = total_paths
                 total_paths *= curr_total_paths #总路由数量
-                start_i = len(back_path)
+                start_i = len(new_back_path)
+
                 if start_i < total_paths:#复制多份节点记录
                     for i in range(0,total_paths -last_total_paths):
-                        back_path[start_i+i] = copy.deepcopy(back_path[i])
+                        new_back_path[start_i+i] = copy.deepcopy(new_back_path[i])
+
+            back_path = new_back_path  # 还原变量==
 
             for _ in range(last_total_paths):
                 for next_post_key in next_post_key_list:
@@ -372,20 +378,20 @@ def showDetailStep( source_str,dest_str,next_post_key_lists,Back=True):
         # 计算后向记录变化情况
         if Back:
             for i  in range( len(next_post_key_list)-1,0,-1):
-                res,source_str = TowCharPath(next_post_key_list,i,source_str,dest_str)
+                res,source_str = towCharPath(next_post_key_list,i,source_str,dest_str)
                 stepStr.extend(res)
         else:
             # 计算前向记录变化情况
             #post_key_list_reverse = next_post_key_list[::-1]
             for i  in range( 1,len(next_post_key_list)):
-                res,source_str = TowCharPath(next_post_key_list, i, source_str, dest_str,Back)
+                res,source_str = towCharPath(next_post_key_list, i, source_str, dest_str,Back)
                 stepStr.extend(res)
 
         pointPathDict[Path_js] =stepStr
     return pointPathDict
 
 # 计算两个字符需要变化的节点详细情况
-def TowCharPath(next_post_key_list,i,source_str,dest_str,Back = True):
+def towCharPath(next_post_key_list,i,source_str,dest_str,Back = True):
     stepStr = []
     if Back:  # 后向计算,计算两点位置
         next_post_key = next_post_key_list[i]
