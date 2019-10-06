@@ -12,8 +12,8 @@ import chardet
 # 功能：将当前目录的字目录中的文件，移动到当前目录下=====
 # 当前目录设置
 # 全局变量 ================
-root_path =r'J:\OK-2018\奔跑吧无码美女大合集最终篇一本道加勒比Heyzo系列'
-#path = r'J:\OK-2017\OK\JP\大橋未久 @@@@@@@@'
+root_path =r'J:\OK-2018\AAAA系列'
+#path = r'J:\OK-2017\OK\JP\AAAAA @@@@@@@@'
 
 def sys_encoding_decoding():
     '''
@@ -48,26 +48,26 @@ def sys_encoding_decoding():
 
     '''
     '''
-    s='中文'
-    s=s.decode('utf-8')   #将utf-8编码的解码成unicode
-    print isinstance(s,unicode)   #此时输出的就是True
-    s=s.encode('utf-8')           #又将unicode码编码成utf-8
-    print isinstance(s,unicode)   #此时输出的就是False
+        s='中文'
+        s=s.decode('utf-8')           #将utf-8编码的解码成unicode
+        print isinstance(s,unicode)   #此时输出的就是True
+        s=s.encode('utf-8')           #又将unicode码编码成utf-8
+        print isinstance(s,unicode)   #此时输出的就是False
     '''
     print sys.getdefaultencoding()
 
     s='中文'
     if isinstance(s,unicode):   #如果是unicode就直接编码不需要解码
-        print s.encode('utf-8')
+        print s.encode('utf-8')      # unicode -> utf8
     else:
-        print s.decode('utf-8').encode('gb2312')
+        print s.decode('utf-8').encode('gb2312')  #utf8->unicode->gb2312
 
     print sys.getdefaultencoding()    #获取系统默认的编码
     reload(sys)
     sys.setdefaultencoding('utf8')    #修改系统的默认编码
     print sys.getdefaultencoding()
 
-#  转化为相对路径格式=========
+#  转化绝对路径为相对路径格式=========
 def getRootDict(currpath):
     strpath = ""
     for ch in currpath:
@@ -105,8 +105,8 @@ def fileExists(filename):
 def execBatfile(filename):
     print(filename)
     #os.system("cmd/c start")
-    #os.system("start cmd /k echo Hello, World!")     # 新开的窗口不关闭
-    os.system("start cmd /c " +filename)            # 新开的窗口会自动关闭，
+    #os.system("start cmd /k echo Hello, World!")     # cmd /k 新开的窗口不关闭
+    os.system("start cmd /c " +filename)            # cmd /c 新开的窗口会自动关闭，
     '''
     proc = subprocess.Popen("cmd.exe /c" + filename,creationflags=subprocess.CREATE_NEW_CONSOLE)
     time.sleep(10)
@@ -129,27 +129,28 @@ def execBatfile(filename):
 # 处理 文件名 含有？的情况，可能为目录
 def chuliErrordictory(sourcefile,root_path):
     moveCmd = ""
-    print(format('sourcedir = %s') % sourcefile.decode(encoding='gbk'))
+    print(format('sourcedir = %s') % sourcefile.decode(encoding='gbk'))  # GBK-->UNICODE
     i = sourcefile.find('?')
     if i > -1:
         currpath = sourcefile[:i] + "*"
-        moveCmd = "cd " + currpath + "\n"
+        moveCmd = 'cd "' + currpath + '"\n'
         r_path = getRootDict(currpath)
         print chardet.detect(currpath)
 
-        print(format('   Curr path = %s  ') % (currpath)).decode(encoding='gbk')  # root_path))   ##.decode('EUC-JP'
+        print(format('   Curr path = %s  ') % (currpath)).decode(encoding='gbk')  # GBK-->UNICODE   root_path))   ##.decode('EUC-JP'
         print(format('   Root path = %s ') % (root_path))
         # os.chdir(currpath.decode(encoding='gbk'))
 
         moveCmd = moveCmd + 'move *.* ' + r_path + "\n"
-        moveCmd = moveCmd + "cd " + root_path.decode(encoding='utf8').encode('mbcs') + "\n"  ##使用Python把UTF8转ANSI编码
+        moveCmd = moveCmd + "cd " + root_path.decode(encoding='utf8').encode('mbcs') + "\n"  ##使用Python把UTF8转ANSI编码 utf8->unicode->mbcs
+        # 返回 windows 的 cmd 命令
     return moveCmd
 
 #  遍历目录，进行文件的移动
 def doWorkDict(home_path):
     print os.getcwd()  # 获取当前工作目录路径
     curr_poject_home = os.getcwd()
-    myrootpath = home_path.decode(encoding='utf8')
+    myrootpath = home_path.decode(encoding='utf8')  ##utf8字符串解码（decode）成unicode
     cmdfile = r'movefile.bat'
     os.chdir(myrootpath)
     print os.getcwd().decode(encoding='gbk')
@@ -169,13 +170,13 @@ def doWorkDict(home_path):
         #for name in dirs:
         #    print(format('dirs = %s') % name).decode(encoding='gbk')
         for name in files:
-            print(format('filename = %s') % os.path.join(root, name)).decode(encoding='gbk')
+            #print(format('filename = %s') % os.path.join(root, name)).decode(encoding='gbk')
             moveCmd = ""
-            if root != '.':
+            if root != '.': ##处理子目录下的文件===
                 print(format('filename = %s') % os.path.join(root, name)).decode(encoding='gbk')
                 sourcefile =(os.path.join(root, name))
 
-                if fileExists(name):
+                if fileExists(name):   #如果当前目录下，存在相同名称的文件，修改目标文件名（增加时间标记），防止覆盖 ===
                     i= name.rfind('.')
                     if i > -1 :
                         name = name[:i] + getTime() + name[i:]
@@ -186,36 +187,20 @@ def doWorkDict(home_path):
                     # 判断 文件名 含有？的错误情况，日语环境， 出现目录中无法识别的字符 识别为？ =====
                     #sourcedir = os.path.join(path,name)
                     moveCmd = chuliErrordictory(sourcefile,root_path)
-                    '''
-                    print(format('sourcedir = %s') % sourcefile.decode(encoding='gbk'))
-                    i = sourcefile.find('?')
-                    if i > -1:
-                        currpath = sourcefile[:i] +"*"
-                        moveCmd = "cd " +currpath + "\n"
-                        r_path = getRootDict(currpath)
-                        print chardet.detect(currpath)
-
-                        print(format('   Curr path = %s  ')%(currpath)).decode(encoding='gbk') #root_path))   ##.decode('EUC-JP'
-                        print(format('   Root path = %s ')%(root_path))
-                        #os.chdir(currpath.decode(encoding='gbk'))
-
-                        moveCmd = moveCmd + 'move *.* ' + r_path + "\n"
-                        moveCmd = moveCmd + "cd " + myrootpath.encode('mbcs') +"\n"     ##使用Python把UTF8转ANSI编码
-                  '''
-                    moveCmd = moveCmd +  'move "' + sourcefile + '" .'
-
+                moveCmd = moveCmd +  'move "' + sourcefile + '" .'
                 newfile = (os.path.join('.',name))
                 try:
-                    shutil.move(sourcefile, newfile)  # 移动文件到新路径
+                    shutil.move(sourcefile, newfile)  # 执行命令，移动文件到新路径
                     print("Finish Move file ! ")
                 except:
                     #对无法移动的文件，写入 bat 文件 ===
                     with open(cmdfile, 'a+') as f:
                         f.write(moveCmd + '\n')  # 加\n换行显示
-            else:
+            else:  ## 处理 当前目录下的异常文件名======
                 sourcefile = (os.path.join(root, name))
                 moveCmd = chuliErrordictory(sourcefile, root_path)
                 if len(moveCmd) > 0:
+                    # 保存到 bat 文件
                     with open(cmdfile, 'a+') as f:
                         f.write(moveCmd + '\n')  # 加\n换行显示
 
