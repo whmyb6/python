@@ -30,7 +30,7 @@ source_str= 'horse' ; dest_str =  'ros'
 
 #source_str = "wonderful"  ; dest_str = "wrong"
 
-#source_str = "industry" ; dest_str   = "interest"
+source_str = "industry" ; dest_str   = "interest"
 
 #source_str = "AdustrA" ; dest_str   = "AteresA"
 
