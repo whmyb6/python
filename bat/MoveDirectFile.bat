@@ -7,10 +7,13 @@
 @Rem %%a 为变量，/r 为递归方式，in 与 do 之间一定要有 ()。
 @Rem
 @Rem for 循环的工作流程：查找当前文件夹及其子文件夹里面的 txt 文件，找到后把文件路径赋值给变量 %%a，然后执行 do 后面的语句，直到遍历完全部文件。
+@Rem
+@Rem setlocal已经达到最大递归层解决方式：
+@Rem 在程序的有效处添加endlocal，终止递归。然后在下面再加一条setlocal，重启递归，即可防止递归最大层。
 @Rem ==========================================================            ====================================================================
 @Rem |                                                        |
 @Rem |          Author: whm           date :2019-10-07        |
-@Rem |                              update :2019-10-10        |
+@Rem |                              update :2019-11-02        |
 @Rem ==========================================================
 @Rem
 
@@ -22,7 +25,7 @@ set curr_disk=%~d0
 echo curr_path = %curr_path%
 echo curr_disk = %curr_disk%
 
-set work_path=D:\test\
+set work_path="D:\Program Files\JiJiDown\Download\IBM 开放技术微讲堂 超级账本Fabric v1.4 LTS系列课程"
 @Rem set work_path=J:\OK-2017\OK\US\
 
 @Rem 保存当前目录以供 POPD 命令使用，然后改到指定的path 目录
@@ -96,8 +99,10 @@ goto :end
 	if not "%%~dps"==%curr_work_path:~0,-1%\" (
 
 		@Rem 关闭变量延迟 ,防止 sfile 无法处理感叹号！！
-		setlocal disabledelayedexpansion
+		endlocal
 		set sfile="%%s"
+
+
 		setlocal enabledelayedexpansion
 
 		set YYYYmmdd=%date:~0,4%%date:~5,2%%date:~8,2%
@@ -130,3 +135,4 @@ goto :end
 
 
 :end
+
