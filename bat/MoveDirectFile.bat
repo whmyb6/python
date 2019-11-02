@@ -79,7 +79,7 @@ goto :end
 	@Rem set mfilepath=!mfilepath:^)=!
 
 	@Rem set filepath=!filepath:\=!
-	echo mfilepath=!mfilepath! f=%%~dps curr_do_path=%curr_do_path%
+	echo mfilepath=!mfilepath! f=%%~dps curr_do_path="%curr_do_path%"
 
 	@Rem call echo ffff=%%mfilepath:%curr_do_path%=%%
     @Rem call set addname=%%mfilepath:%curr_do_path%=%%
