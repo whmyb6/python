@@ -73,7 +73,7 @@ def search_allPoin():
 
 #==================  MAIN ==========================
 if __name__ == '__main__':
-    flagValue =2
+    #flagValue =2
     landList=copy.deepcopy(map_source)
     H =len(landList[0])
     W =len(landList)
