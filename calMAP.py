@@ -22,10 +22,10 @@ map_source=[[0,0,0,1,1,0,0,1,1,1]
 # 新大陆标记
 landList=[]
 
-# 表示表格 高度
+# 表示表格 列数
 H=0
 
-# 表示表格 宽度
+# 表示表格 行数
 W=0
 
 
@@ -34,23 +34,25 @@ W=0
 def find_newLand(X,Y,FlagValue):
     #print ("FlagValue",X,Y,FlagValue)
     #print("landList[X][Y]",landList[X][Y])
+    #将标记写入当前发现的新大陆位置
     landList[X][Y]=FlagValue
-    #  UP 向上遍历====
+    #  LEFT 向左遍历====
     dy = Y-1
     if dy >=0 :
+        # 发现新大陆，开始递归
         if landList[X][dy] ==1:
             find_newLand(X,dy,FlagValue)
-    # RIGHT 向右遍历 =====
+    #  DOWN 向下遍历 =====
     dx =X+1
     if dx < W :
         if landList[dx][Y]==1:
             find_newLand(dx,Y,FlagValue)
-    # DOWN  向下遍历====
+    # RIGHT  向右遍历====
     dy=Y+1
     if dy<H:
         if landList[X][dy]==1:
             find_newLand(X,dy,FlagValue)
-    # LEFT 向左遍历 ====
+    # UP 向上遍历 ====
     dx = X-1
     if dx >=0:
         if landList[dx][Y]==1:
@@ -61,8 +63,8 @@ def find_newLand(X,Y,FlagValue):
 # 从头到尾，对每个节点进行遍历
 def search_allPoin():
     flagValue=1
-    for x in range(W):
-        for y in range(H):
+    for x in range(W):  #按行遍历
+        for y in range(H):  #按列遍历
             # 1 表示发现一个新大陆===
             if landList[x][y] ==1 :
                 flagValue += 1
@@ -75,8 +77,8 @@ def search_allPoin():
 if __name__ == '__main__':
     #flagValue =2
     landList=copy.deepcopy(map_source)
-    H =len(landList[0])
-    W =len(landList)
+    H =len(landList[0]) # 获取列号
+    W =len(landList)   # 获取行号
 
     for x in landList:
         print(x)
