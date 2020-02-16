@@ -23,10 +23,10 @@ map_source=[[0,0,0,1,1,0,0,1,1,1]
 landList=[]
 
 # 表示表格 列数
-H=0
+COLUMN = 0
 
 # 表示表格 行数
-W=0
+ROW = 0
 
 
 # 采用递归算法 ，遍历发现的新大陆
@@ -44,12 +44,12 @@ def find_newLand(X,Y,FlagValue):
             find_newLand(X,dy,FlagValue)
     #  DOWN 向下遍历 =====
     dx =X+1
-    if dx < W :
+    if dx < ROW :
         if landList[dx][Y]==1:
             find_newLand(dx,Y,FlagValue)
     # RIGHT  向右遍历====
     dy=Y+1
-    if dy<H:
+    if dy < COLUMN :
         if landList[X][dy]==1:
             find_newLand(X,dy,FlagValue)
     # UP 向上遍历 ====
@@ -63,22 +63,22 @@ def find_newLand(X,Y,FlagValue):
 # 从头到尾，对每个节点进行遍历
 def search_allPoin():
     flagValue=1
-    for x in range(W):  #按行遍历
-        for y in range(H):  #按列遍历
+    for x in range(ROW):  #按行遍历
+        for y in range(COLUMN):  #按列遍历
             # 1 表示发现一个新大陆===
             if landList[x][y] ==1 :
-                flagValue += 1
+                flagValue += 1  #将发现新大陆的标记增加一个
                 find_newLand(x,y,flagValue)
                 #print("landList[X][Y]",x,y, landList[x][y])
-
+    #返回，总计的岛屿数量，因为，标签从1开始，所以减掉1 ---
     return flagValue -1
 
 #==================  MAIN ==========================
 if __name__ == '__main__':
     #flagValue =2
     landList=copy.deepcopy(map_source)
-    H =len(landList[0]) # 获取列号
-    W =len(landList)   # 获取行号
+    COLUMN =len(landList[0]) # 获取列号
+    ROW =len(landList)   # 获取行号
 
     for x in landList:
         print(x)
@@ -88,4 +88,4 @@ if __name__ == '__main__':
     print("")
     for x in landList:
         print(x)
-    print("Result:" ,num )
+    print("\n   Result = %d" % num )
