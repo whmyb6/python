@@ -55,9 +55,9 @@
 			echo maxlen=!maxlen!  !mfilepath!
             if !maxlen! GTR 0 (
 			   for /f  "tokens=1,2 delims=@" %%i in (temp.txt) do (
-				   echo %%i,%%j
-				   @Rem 如果文件头含有数字，就进行处理，生成rename命令===
-				   echo %%j | findstr [0-9] >nul &&(
+				   @Rem echo %%i,%%j
+				   @Rem 如果文件头含有数字，,以数字开始，就进行处理，生成rename命令===
+				   echo %%i | findstr /b [^0-9] >nul &&(
 						if !maxlen! gtr %%j (
 							@Rem 计算需要重复的0的个数
 							set /A replacenum=!maxlen!-%%j
@@ -99,7 +99,7 @@
 			@Rem 如果文件头含有数字就进行处理===
 			@Rem 查找当前目录中文件头的长度的最大值，保存到 maxlen
 			@Rem 保存当前的文件名和文件头长度，到临时文件temp.txt, 格式：文件名@长度
-			echo !curr_head! | findstr [0-9] >nul && (
+			echo !curr_head! | findstr /b [^0-9] >nul && (
 				if !strlen! gtr !maxlen! set /A maxlen=!strlen!
 				echo !mfilename!@!strlen! >> temp.txt
 			)
@@ -110,9 +110,9 @@
 
    @Rem 处理带格式的临时文件，生成批命令文件===
    for /f  "tokens=1,2 delims=@" %%i in (temp.txt) do (
-       echo %%i,%%j
-	   @Rem 如果文件头含有数字，就进行处理===
-	   echo %%j | findstr [0-9] >nul &&(
+       @Rem echo %%i,%%j
+	   @Rem 如果文件头含有数字,以数字开始，就进行处理===
+	   echo %%i | findstr /b [^0-9] >nul &&(
 			if !maxlen! gtr %%j (
 				@Rem 计算需要重复的0的个数
 			    set /A replacenum=!maxlen!-%%j
