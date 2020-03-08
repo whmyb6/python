@@ -10,7 +10,7 @@
 @Rem ==========================================================            ====================================================================
 @Rem |                                                        |
 @Rem |          Author: whm           date :2020-02-23        |
-@Rem |                              update :2020-02-23        |
+@Rem |                              update :2020-03-08        |
 @Rem ==========================================================
 @Rem
 
@@ -31,8 +31,13 @@
 		  goto :eof
 		)
 	)
+	@Rem 定义分割文件名与数字长度的标志字符，注意，该字符不能出现在文件名中，否则处理错误！
+	set delimsChar=$
 
+	@Rem 初始化当前文件path
 	set filepath=%cd%
+
+	@Rem 设置重复0的长度字符串
     set zero_str=000000000
 
 	del temp.txt
@@ -54,7 +59,7 @@
 			@Rem 处理带格式的临时文件，生成批命令文件
 			echo maxlen=!maxlen!  !mfilepath!
             if !maxlen! GTR 0 (
-			   for /f  "tokens=1,2 delims=@" %%i in (temp.txt) do (
+			   for /f  "tokens=1,2 delims=%delimsChar%" %%i in (temp.txt) do (
 				   @Rem echo %%i,%%j
 				   @Rem 如果文件头含有数字，,以数字开始，就进行处理，生成rename命令===
 				   echo %%i | findstr /b [^0-9] >nul &&(
@@ -101,7 +106,7 @@
 			@Rem 保存当前的文件名和文件头长度，到临时文件temp.txt, 格式：文件名@长度
 			echo !curr_head! | findstr /b [^0-9] >nul && (
 				if !strlen! gtr !maxlen! set /A maxlen=!strlen!
-				echo !mfilename!@!strlen! >> temp.txt
+				echo !mfilename!%delimsChar%!strlen! >> temp.txt
 			)
 			@Rem echo 'maxlen= ' !maxlen!
 	   )
@@ -109,7 +114,7 @@
    echo '============'
 
    @Rem 处理带格式的临时文件，生成批命令文件===
-   for /f  "tokens=1,2 delims=@" %%i in (temp.txt) do (
+   for /f  "tokens=1,2 delims=%delimsChar%" %%i in (temp.txt) do (
        @Rem echo %%i,%%j
 	   @Rem 如果文件头含有数字,以数字开始，就进行处理===
 	   echo %%i | findstr /b [^0-9] >nul &&(
