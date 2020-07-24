@@ -28,12 +28,14 @@ echo curr_disk = %curr_disk%
 @Rem set work_path="D:\Program Files\JiJiDown\Download\IBM 开放技术微讲堂 超级账本Fabric v1.4 LTS系列课程"
 @Rem set work_path=J:\OK-2017\OK\US\
 
+set work_path="%curr_path%"
 
 @echo off
     echo *****************************************************************
-    echo     提示：  存在风险，移动当前目录 %curr_path%
-	echo     下的一级子目录中的子目录里面的全部文件,到一级子目录下！
-	set /p input =.        确认，请输入(y/n):
+    echo     提示：  存在风险，把当前目录 %curr_path%
+	echo     下的一级子目录中的全部文件,移动到一级子目录下！！！
+	echo .
+	set /p input=.             确认，请输入(y/n):
 	echo %input%
 	if "%input%"=="y" (
 		echo ok
@@ -44,7 +46,6 @@ echo curr_disk = %curr_disk%
 		  goto :eof
 		)
 	)
-
 
 
 @Rem 保存当前目录以供 POPD 命令使用，然后改到指定的path 目录
