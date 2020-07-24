@@ -13,7 +13,7 @@
 @Rem ==========================================================            ====================================================================
 @Rem |                                                        |
 @Rem |          Author: whm           date :2019-10-07        |
-@Rem |                              update :2019-11-02        |
+@Rem |                              update :2020-07-24        |
 @Rem ==========================================================
 @Rem
 
@@ -25,11 +25,33 @@ set curr_disk=%~d0
 echo curr_path = %curr_path%
 echo curr_disk = %curr_disk%
 
-set work_path="D:\Program Files\JiJiDown\Download\IBM 开放技术微讲堂 超级账本Fabric v1.4 LTS系列课程"
+@Rem set work_path="D:\Program Files\JiJiDown\Download\IBM 开放技术微讲堂 超级账本Fabric v1.4 LTS系列课程"
 @Rem set work_path=J:\OK-2017\OK\US\
+
+
+@echo off
+    echo *****************************************************************
+    echo     提示：  存在风险，移动当前目录 %curr_path%
+	echo     下的一级子目录中的子目录里面的全部文件,到一级子目录下！
+	set /p input =.        确认，请输入(y/n):
+	echo %input%
+	if "%input%"=="y" (
+		echo ok
+	) else (
+		if "%input%"=="Y" (
+			echo ok
+		) else (
+		  goto :eof
+		)
+	)
+
+
 
 @Rem 保存当前目录以供 POPD 命令使用，然后改到指定的path 目录
 pushd %work_path%
+
+
+
 
 del temp.txt
 
