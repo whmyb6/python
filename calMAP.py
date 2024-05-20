@@ -97,3 +97,4 @@ if __name__ == '__main__':
     for x in landList:
         print(x)
     print("\n   Result = %d" % num )
+
